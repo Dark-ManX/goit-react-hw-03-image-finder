@@ -23,10 +23,9 @@ class ImageGallery extends Component {
         const {data} = this.props;
         const {page} = this.state;
 
-        if (prevProps.data !== data || prevState.page !== page) {
+        if (prevProps.data !== data  || prevState.page !== page) {
             this.setState({
                 status: 'pending',
-                gallery: [],
             })
             
             fetch(`${BASE_URL}?q=${data}&page=${page}&key=27564441-2bad7552450aa73f501c58b21&image_type=photo&orientation=horizontal&per_page=12`)
@@ -39,10 +38,15 @@ class ImageGallery extends Component {
                     new Error('not found')
                 )
             })
-            .then(data => (this.setState(prevState => {
-                    return ({gallery: prevState.gallery.concat(data.hits), status: 'resolved', })
-                }
-            )))
+            .then(response => (this.setState(prevProps => {
+                const arr = prevState.gallery.concat(response.hits);
+                
+                return ({gallery: arr.filter((el, ind) => {
+                    return (arr.indexOf(el) === ind)}), 
+                    status: 'resolved', })
+                                         
+            })
+            ))
             .catch(error => this.setState({error, status: 'rejected'})) 
         }
     }
