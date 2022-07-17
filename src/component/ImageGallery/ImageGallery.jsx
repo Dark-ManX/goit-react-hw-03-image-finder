@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import ImageGalleryItem from "../ImageGalleryItem/ImageGalleryItem";
 import Loader from "../Loader/Loader";
-import Button from "../Button/Button";
-import { StyledGallery, Image, Container } from "./ImageGallery.styled";
+import { StyledGallery, Image, Container, Button } from "./ImageGallery.styled";
 import Modal from "../Modal/Modal";
 
 const BASE_URL = 'https://pixabay.com/api/';
@@ -21,10 +20,16 @@ class ImageGallery extends Component {
 
     componentDidUpdate(prevProps, prevState) {
 
-        if (prevProps.data !== this.props.data || prevState.page !== this.state.page) {
-            this.setState({status: 'pending'})
+        const {data} = this.props;
+        const {page} = this.state;
+
+        if (prevProps.data !== data || prevState.page !== page) {
+            this.setState({
+                status: 'pending',
+                gallery: [],
+            })
             
-            fetch(`${BASE_URL}?q=${this.props.data}&page=${this.state.page}&key=27564441-2bad7552450aa73f501c58b21&image_type=photo&orientation=horizontal&per_page=12`)
+            fetch(`${BASE_URL}?q=${data}&page=${page}&key=27564441-2bad7552450aa73f501c58b21&image_type=photo&orientation=horizontal&per_page=12`)
             .then((res) => {
                 if (res.ok) {
                     return res.json();
@@ -43,14 +48,14 @@ class ImageGallery extends Component {
     }
 
     handleLoad = () => {
-        this.setState(prev => ({page: prev.page + 1,}))
+       this.setState(prevState => ({page: prevState.page + 1}))
     }
 
-    handleClick = ({largeImageURL}, ind) => {
+    handleClick = (el, ind) => {
         console.log('clicked');
         this.setState({
             ind: ind,
-            img: largeImageURL,
+            img: el.largeImageURL,
             showModal: true,
         })
     }
@@ -60,7 +65,7 @@ class ImageGallery extends Component {
     }
 
     render () {
-        const {gallery, status} = this.state;
+        const {gallery, status, showModal, img} = this.state;
                 console.log(gallery);
 
 
@@ -71,7 +76,7 @@ class ImageGallery extends Component {
             
             case 'resolved':
                 return (
-                    <div>
+                    <Container>
                         <StyledGallery>
                             {gallery.map((el, ind) => {
 
@@ -82,9 +87,10 @@ class ImageGallery extends Component {
                                 )})}
 
                         </StyledGallery>
-                        <Button onClick={this.handleLoad}>Load more</Button>
-                        {this.state.showModal && <Modal onClose={this.onClose} children={<Image src={this.state.img}/>}/>}
-                    </div>
+
+                        <Button onClick={this.handleLoad} type="button">Load more</Button>
+                        {showModal && <Modal onClose={this.onClose} children={<Image src={img}/>}/>}
+                    </Container>
                 );
 
             case 'rejected':

@@ -15,3 +15,9 @@ display: block;
 export const Container = styled.div`
 text-align: center;
 `
+
+export const Button = styled.button`
+background-color: darkblue;
+color: white;
+padding: 10px 35px;
+border-radius: 5px`

@@ -1,3 +1,4 @@
+import PropTypes, { string } from 'prop-types';
 import { StyledLi, Img } from "./ImageGalleryItem.styled";
 
 const ImageGalleryItem = ({onClick, preview, alt}) => {
@@ -9,3 +10,9 @@ const ImageGalleryItem = ({onClick, preview, alt}) => {
 }
 
 export default ImageGalleryItem;
+
+ImageGalleryItem.propTypes = {
+    onClick: PropTypes.func,
+    preview: PropTypes.string,
+    alt: PropTypes.string,
+}

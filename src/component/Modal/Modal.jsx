@@ -7,18 +7,28 @@ const modalRoot = document.querySelector('#modal')
 class Modal extends Component {
     
     componentDidMount() {
-        window.addEventListener('keydown', e => {
-            if (e.code === 'Escape') {
-                this.props.onClose();
-            }
-        })
+        window.addEventListener('keydown', this.handleKeyDown)
 
-        window.addEventListener('click', e => {
-            if (e.target.nodeName !== 'IMG') {
-                this.props.onClose();
-            } 
-        })
+        window.addEventListener('click', this.handleClick)
+        }
+
+    componentWillUnmount() {
+        window.removeEventListener('keydown', this.handleKeyDown);
+
+        window.removeEventListener('click', this.handleClick);
     }
+
+    handleKeyDown = (e) => {
+        if (e.code === 'Escape') {
+            this.props.onClose();
+        }
+    }
+
+    handleClick = e => {
+        if (e.target.nodeName !== 'IMG') {
+            this.props.onClose();
+        } 
+    } 
 
     render() {
         return createPortal(

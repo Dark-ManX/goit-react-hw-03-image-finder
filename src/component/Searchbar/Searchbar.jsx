@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import SvgSearch from "../additional/SvgSearch/SvgSearch";
-import {Backdrop, Form, SearchBtn, Search, StyledSvg} from './Searchbar.styled';
+import {Backdrop, Form, SearchBtn, Search} from './Searchbar.styled';
 
 class Searchbar extends Component {
     
