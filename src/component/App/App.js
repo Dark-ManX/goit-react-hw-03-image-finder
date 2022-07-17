@@ -7,10 +7,11 @@ import ImageGallery from "../ImageGallery/ImageGallery";
 class App extends Component {
   state = {
     search: "",
+    images: [],
   };
 
   handleFetch = (text) => {
-    this.setState({ search: text });
+    this.setState({ search: text, images: [] });
   };
 
   render() {

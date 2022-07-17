@@ -5,5 +5,5 @@ list-style: none;
 `
 
 export const Img = styled.img`
-width: 300px;
+width: 400px;
 `

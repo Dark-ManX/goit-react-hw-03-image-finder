@@ -38,7 +38,7 @@ class ImageGallery extends Component {
                     new Error('not found')
                 )
             })
-            .then(response => (this.setState(prevProps => {
+            .then(response => (this.setState(prevState => {
                 const arr = prevState.gallery.concat(response.hits);
                 
                 return ({gallery: arr.filter((el, ind) => {
