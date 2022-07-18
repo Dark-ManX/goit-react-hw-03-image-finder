@@ -1,4 +1,4 @@
-import PropTypes, { string } from 'prop-types';
+import PropTypes from 'prop-types';
 import { StyledLi, Img } from "./ImageGalleryItem.styled";
 
 const ImageGalleryItem = ({onClick, preview, alt}) => {
