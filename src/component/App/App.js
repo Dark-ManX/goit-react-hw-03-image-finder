@@ -6,6 +6,7 @@ import Loader from "../Loader/Loader";
 import Modal from "../Modal/Modal";
 import fetchRes from "../additional/fetchFunc/fetchFunc";
 import { Container, Button, DisabledBtn, Image } from "./App.styled";
+import fetchTotal from "../additional/fetchFunc/fetchTotal";
 // import { StyledGallery, Image, Container, Button } from "./ImageGallery.styled";
 
 // const BASE_URL = "https://pixabay.com/api/";
@@ -15,6 +16,7 @@ class App extends Component {
     search: "",
     page: 1,
     gallery: [],
+    total: null,
     error: null,
     status: "none",
     img: null,
@@ -33,16 +35,21 @@ class App extends Component {
 
       fetchRes(search, page)
         .then(({ hits }) => {
-          console.log(hits.length);
-          // if (hits.length === this.state.gallery.length) {
-          //   this.setState({ disabled: true });
-          // }
           this.setState((prevState) => ({
             gallery: prevState.gallery.concat(hits),
             status: "resolved",
           }));
         })
         .catch((error) => this.setState({ error, status: "rejected" }));
+
+      fetchTotal(search).then(({ hits }) => {
+        if (hits.length === this.state.gallery.length) {
+          this.setState({
+            total: hits.length,
+            disabled: true,
+          });
+        }
+      });
     }
   }
 
@@ -51,12 +58,14 @@ class App extends Component {
   };
 
   handleLoad = () => {
-    this.setState((prevState) => ({
+    const { gallery } = this.state;
+
+    return this.setState((prevState) => ({
       page: prevState.page + 1,
       gallery: [
         ...prevState.gallery
-          .concat(this.state.gallery)
-          .filter((el, ind) => this.state.gallery.indexOf(el) === ind),
+          .concat(gallery)
+          .filter((el, ind) => gallery.indexOf(el) === ind),
       ],
     }));
   };
@@ -76,8 +85,10 @@ class App extends Component {
   };
 
   render() {
-    const { gallery, status, showModal, img, alt, disabled } = this.state;
-    console.log(img);
+    const { search, gallery, status, showModal, img, alt, disabled, total } =
+      this.state;
+
+    console.log(total);
 
     switch (status) {
       case "pending":

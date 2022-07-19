@@ -1,4 +1,4 @@
-
+import PropTypes from 'prop-types';
 
 const fetchRes = (search, page) => {
     const BASE_URL = "https://pixabay.com/api/";
@@ -16,3 +16,8 @@ const fetchRes = (search, page) => {
 }
 
 export default fetchRes;
+
+fetchRes.propTypes = {
+    search: PropTypes.string,
+    page: PropTypes.number,
+}
