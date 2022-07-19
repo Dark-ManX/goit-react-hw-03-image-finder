@@ -4,22 +4,23 @@ import Searchbar from "../Searchbar/Searchbar";
 import ImageGallery from "../ImageGallery/ImageGallery";
 import Loader from "../Loader/Loader";
 import Modal from "../Modal/Modal";
-import { Container, Button, Image } from "./App.styled";
+import fetchRes from "../additional/fetchFunc/fetchFunc";
+import { Container, Button, DisabledBtn, Image } from "./App.styled";
 // import { StyledGallery, Image, Container, Button } from "./ImageGallery.styled";
 
-const BASE_URL = "https://pixabay.com/api/";
+// const BASE_URL = "https://pixabay.com/api/";
 
 class App extends Component {
   state = {
     search: "",
     page: 1,
     gallery: [],
-    images: [],
     error: null,
     status: "none",
     img: null,
-    ind: null,
+    alt: "",
     showModal: false,
+    disabled: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
@@ -30,17 +31,12 @@ class App extends Component {
         status: "pending",
       });
 
-      fetch(
-        `${BASE_URL}?q=${search}&page=${page}&key=27564441-2bad7552450aa73f501c58b21&image_type=photo&orientation=horizontal&per_page=12`
-      )
-        .then((res) => {
-          if (res.ok) {
-            return res.json();
-          }
-
-          return Promise.rejected(new Error("not found"));
-        })
+      fetchRes(search, page)
         .then(({ hits }) => {
+          console.log(hits.length);
+          // if (hits.length === this.state.gallery.length) {
+          //   this.setState({ disabled: true });
+          // }
           this.setState((prevState) => ({
             gallery: prevState.gallery.concat(hits),
             status: "resolved",
@@ -51,21 +47,26 @@ class App extends Component {
   }
 
   handleFetch = (text) => {
-    this.setState({ search: text, gallery: [] });
+    this.setState({ search: text, gallery: [], page: 1 });
   };
 
   handleLoad = () => {
     this.setState((prevState) => ({
       page: prevState.page + 1,
-      gallery: this.state.gallery.concat(this.state.images),
+      gallery: [
+        ...prevState.gallery
+          .concat(this.state.gallery)
+          .filter((el, ind) => this.state.gallery.indexOf(el) === ind),
+      ],
     }));
   };
 
-  handleClick = (el, ind) => {
-    console.log("clicked");
+  handleClick = (ind) => {
+    const { gallery } = this.state;
+    const [largeImg] = gallery.filter((el) => el.id === ind);
+
     this.setState({
-      ind: ind,
-      img: el.largeImageURL,
+      img: largeImg,
       showModal: true,
     });
   };
@@ -75,8 +76,8 @@ class App extends Component {
   };
 
   render() {
-    const { gallery, status, showModal, img } = this.state;
-    console.log(gallery);
+    const { gallery, status, showModal, img, alt, disabled } = this.state;
+    console.log(img);
 
     switch (status) {
       case "pending":
@@ -93,14 +94,23 @@ class App extends Component {
           <Container>
             <Searchbar onSearch={this.handleFetch} />
 
-            <ImageGallery gallery={gallery} />
+            <ImageGallery gallery={gallery} onClick={this.handleClick} />
 
-            <Button onClick={this.handleLoad} type="button">
-              Load more
-            </Button>
+            {!disabled ? (
+              <Button onClick={this.handleLoad} type="button">
+                Load more
+              </Button>
+            ) : (
+              <DisabledBtn type="button" disabled>
+                Load more
+              </DisabledBtn>
+            )}
 
             {showModal && (
-              <Modal onClose={this.onClose} children={<Image src={img} />} />
+              <Modal
+                onClose={this.onClose}
+                children={<Image src={img.largeImageURL} alt={alt} />}
+              />
             )}
           </Container>
         );
@@ -118,8 +128,6 @@ class App extends Component {
         return (
           <Container>
             <Searchbar onSearch={this.handleFetch} />
-
-            <ImageGallery gallery={gallery} />
           </Container>
         );
     }

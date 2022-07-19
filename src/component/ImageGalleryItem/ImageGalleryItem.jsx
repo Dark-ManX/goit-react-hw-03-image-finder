@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types';
 import { StyledLi, Img } from "./ImageGalleryItem.styled";
 
-const ImageGalleryItem = ({onClick, preview, alt}) => {
+const ImageGalleryItem = ({preview, alt, handleClick, id}) => {
     return (
             <StyledLi>
-                <Img src={preview} alt={alt} onClick={onClick}/>
+                <Img src={preview} alt={alt} onClick={() => handleClick(id)}/>
             </StyledLi>
     )
 }
