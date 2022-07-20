@@ -36,6 +36,7 @@ class App extends Component {
           this.setState((prevState) => ({
             gallery: prevState.gallery.concat(hits),
             status: "resolved",
+            disabled: false,
           }));
         })
         .catch((error) => this.setState({ error, status: "rejected" }));
