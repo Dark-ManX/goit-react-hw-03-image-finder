@@ -9,8 +9,6 @@ import { Container, Button, DisabledBtn, Image } from "./App.styled";
 import fetchTotal from "../additional/fetchFunc/fetchTotal";
 // import { StyledGallery, Image, Container, Button } from "./ImageGallery.styled";
 
-// const BASE_URL = "https://pixabay.com/api/";
-
 class App extends Component {
   state = {
     search: "",
@@ -85,7 +83,7 @@ class App extends Component {
   };
 
   render() {
-    const { search, gallery, status, showModal, img, alt, disabled, total } =
+    const { gallery, status, showModal, img, alt, disabled, total } =
       this.state;
 
     console.log(total);
