@@ -6,7 +6,6 @@ import Loader from "../Loader/Loader";
 import Modal from "../Modal/Modal";
 import fetchRes from "../additional/fetchFunc/fetchFunc";
 import { Container, Button, DisabledBtn, Image } from "./App.styled";
-import fetchTotal from "../additional/fetchFunc/fetchTotal";
 // import { StyledGallery, Image, Container, Button } from "./ImageGallery.styled";
 
 class App extends Component {
@@ -21,34 +20,26 @@ class App extends Component {
     alt: "",
     showModal: false,
     disabled: false,
+    perPage: 12,
   };
 
   componentDidUpdate(prevProps, prevState) {
-    const { page, search } = this.state;
+    const { page, search, perPage } = this.state;
 
     if (prevState.search !== search || prevState.page !== page) {
       this.setState({
         status: "pending",
       });
 
-      fetchRes(search, page)
-        .then(({ hits }) => {
+      fetchRes(search, page, perPage)
+        .then(({ totalHits, hits }) => {
           this.setState((prevState) => ({
             gallery: prevState.gallery.concat(hits),
             status: "resolved",
-            disabled: false,
+            disabled: page === Math.ceil(totalHits / perPage),
           }));
         })
         .catch((error) => this.setState({ error, status: "rejected" }));
-
-      fetchTotal(search).then(({ hits }) => {
-        if (hits.length === this.state.gallery.length) {
-          this.setState({
-            total: hits.length,
-            disabled: true,
-          });
-        }
-      });
     }
   }
 
@@ -84,10 +75,7 @@ class App extends Component {
   };
 
   render() {
-    const { gallery, status, showModal, img, alt, disabled, total } =
-      this.state;
-
-    console.log(total);
+    const { gallery, status, showModal, img, alt, disabled } = this.state;
 
     switch (status) {
       case "pending":
