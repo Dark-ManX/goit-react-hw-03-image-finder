@@ -77,23 +77,15 @@ class App extends Component {
   render() {
     const { gallery, status, showModal, img, alt, disabled } = this.state;
 
-    switch (status) {
-      case "pending":
-        return (
-          <Container>
-            <Searchbar onSearch={this.handleFetch} />
+    return (
+      <Container>
+        <Searchbar onSearch={this.handleFetch} />
 
-            <Loader />
-          </Container>
-        );
+        {status === "rejected" && <p>Information not found</p>}
 
-      case "resolved":
-        return (
-          <Container>
-            <Searchbar onSearch={this.handleFetch} />
-
+        {status === "resolved" && (
+          <>
             <ImageGallery gallery={gallery} onClick={this.handleClick} />
-
             {!disabled ? (
               <Button onClick={this.handleLoad} type="button">
                 Load more
@@ -103,32 +95,54 @@ class App extends Component {
                 Load more
               </DisabledBtn>
             )}
+          </>
+        )}
 
-            {showModal && (
-              <Modal
-                onClose={this.onClose}
-                children={<Image src={img.largeImageURL} alt={alt} />}
-              />
-            )}
-          </Container>
-        );
+        {status === "pending" && <Loader />}
+      </Container>
+    );
 
-      case "rejected":
-        return (
-          <Container>
-            <Searchbar onSearch={this.handleFetch} />
+    // case "resolved":
+    //   return (
+    //     <Container>
+    //       <Searchbar onSearch={this.handleFetch} />
 
-            <p>Information not found</p>
-          </Container>
-        );
+    //       <ImageGallery gallery={gallery} onClick={this.handleClick} />
 
-      default:
-        return (
-          <Container>
-            <Searchbar onSearch={this.handleFetch} />
-          </Container>
-        );
-    }
+    //       {!disabled ? (
+    //         <Button onClick={this.handleLoad} type="button">
+    //           Load more
+    //         </Button>
+    //       ) : (
+    //         <DisabledBtn type="button" disabled>
+    //           Load more
+    //         </DisabledBtn>
+    //       )}
+
+    //       {showModal && (
+    //         <Modal
+    //           onClose={this.onClose}
+    //           children={<Image src={img.largeImageURL} alt={alt} />}
+    //         />
+    //       )}
+    //     </Container>
+    //   );
+
+    // case "rejected":
+    //   return (
+    //     <Container>
+    //       <Searchbar onSearch={this.handleFetch} />
+
+    //       <p>Information not found</p>
+    //     </Container>
+    //   );
+
+    // default:
+    //   return (
+    //     <Container>
+    //       <Searchbar onSearch={this.handleFetch} />
+    //     </Container>
+    //   );
   }
 }
 
