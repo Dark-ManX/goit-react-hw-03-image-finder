@@ -27,10 +27,6 @@ class App extends Component {
     const { page, search, perPage } = this.state;
 
     if (prevState.search !== search || prevState.page !== page) {
-      this.setState({
-        status: "pending",
-      });
-
       fetchRes(search, page, perPage)
         .then(({ totalHits, hits }) => {
           this.setState((prevState) => ({
@@ -44,7 +40,7 @@ class App extends Component {
   }
 
   handleFetch = (text) => {
-    this.setState({ search: text, gallery: [], page: 1 });
+    this.setState({ search: text, gallery: [], page: 1, status: "pending" });
   };
 
   handleLoad = () => {
