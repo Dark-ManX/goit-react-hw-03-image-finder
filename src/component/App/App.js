@@ -101,48 +101,6 @@ class App extends Component {
         {status === "pending" && <Loader />}
       </Container>
     );
-
-    // case "resolved":
-    //   return (
-    //     <Container>
-    //       <Searchbar onSearch={this.handleFetch} />
-
-    //       <ImageGallery gallery={gallery} onClick={this.handleClick} />
-
-    //       {!disabled ? (
-    //         <Button onClick={this.handleLoad} type="button">
-    //           Load more
-    //         </Button>
-    //       ) : (
-    //         <DisabledBtn type="button" disabled>
-    //           Load more
-    //         </DisabledBtn>
-    //       )}
-
-    //       {showModal && (
-    //         <Modal
-    //           onClose={this.onClose}
-    //           children={<Image src={img.largeImageURL} alt={alt} />}
-    //         />
-    //       )}
-    //     </Container>
-    //   );
-
-    // case "rejected":
-    //   return (
-    //     <Container>
-    //       <Searchbar onSearch={this.handleFetch} />
-
-    //       <p>Information not found</p>
-    //     </Container>
-    //   );
-
-    // default:
-    //   return (
-    //     <Container>
-    //       <Searchbar onSearch={this.handleFetch} />
-    //     </Container>
-    //   );
   }
 }
 
