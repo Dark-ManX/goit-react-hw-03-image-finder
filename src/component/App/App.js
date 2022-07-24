@@ -80,7 +80,7 @@ class App extends Component {
         {status === "rejected" && <p>Information not found</p>}
 
         {status === "resolved" && (
-          <>
+          <Container>
             <ImageGallery gallery={gallery} onClick={this.handleClick} />
             {!disabled ? (
               <Button onClick={this.handleLoad} type="button">
@@ -91,7 +91,14 @@ class App extends Component {
                 Load more
               </DisabledBtn>
             )}
-          </>
+
+            {showModal && (
+              <Modal
+                onClose={this.onClose}
+                children={<Image src={img.largeImageURL} alt={alt} />}
+              />
+            )}
+          </Container>
         )}
 
         {status === "pending" && <Loader />}
